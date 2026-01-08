@@ -476,7 +476,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function getShareContent(name, details) {
     const formattedSchedule = formatSchedule(details);
     const currentUrl = window.location.origin + window.location.pathname;
-    const shareText = `Check out ${name} at Mergington High School! ${details.description} Schedule: ${formattedSchedule}`;
+    
+    // Sanitize text content for sharing
+    const sanitizedName = name.replace(/[<>]/g, '');
+    const sanitizedDescription = details.description.replace(/[<>]/g, '');
+    
+    const shareText = `Check out ${sanitizedName} at Mergington High School! ${sanitizedDescription} Schedule: ${formattedSchedule}`;
     const encodedText = encodeURIComponent(shareText);
     const encodedUrl = encodeURIComponent(currentUrl);
     
@@ -506,9 +511,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (shareUrl) {
       // Email uses mailto: protocol, others use popup window
       if (platform === 'email') {
-        window.location.href = shareUrl;
+        // Validate mailto: protocol before navigating
+        if (shareUrl.startsWith('mailto:')) {
+          window.location.href = shareUrl;
+        }
       } else {
-        window.open(shareUrl, '_blank', 'width=600,height=400');
+        window.open(shareUrl, '_blank', 'width=600,height=400,noopener,noreferrer');
       }
     }
   }
@@ -561,19 +569,21 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
     // Create social sharing buttons
+    // Note: We don't add data-activity attribute here to avoid XSS issues
+    // Instead, we use event delegation and get the name from the closure
     const shareButtons = `
       <div class="social-share">
         <span class="share-label">Share:</span>
-        <button class="share-button facebook-share" data-activity="${name}" title="Share on Facebook">
+        <button class="share-button facebook-share" title="Share on Facebook">
           <span class="share-icon">f</span>
         </button>
-        <button class="share-button twitter-share" data-activity="${name}" title="Share on X">
+        <button class="share-button twitter-share" title="Share on X">
           <span class="share-icon">X</span>
         </button>
-        <button class="share-button linkedin-share" data-activity="${name}" title="Share on LinkedIn">
+        <button class="share-button linkedin-share" title="Share on LinkedIn">
           <span class="share-icon">in</span>
         </button>
-        <button class="share-button email-share" data-activity="${name}" title="Share via Email">
+        <button class="share-button email-share" title="Share via Email">
           <span class="share-icon">✉</span>
         </button>
       </div>
