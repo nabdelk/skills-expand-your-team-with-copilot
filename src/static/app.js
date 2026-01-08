@@ -505,17 +505,15 @@ document.addEventListener("DOMContentLoaded", () => {
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
         break;
       case 'email':
-        shareUrl = `mailto:?subject=${encodeURIComponent('Activity at ' + schoolName)}&body=${encodedText}%0D%0A%0D%0A${encodedUrl}`;
+        const doubleLineBreak = encodeURIComponent('\r\n\r\n');
+        shareUrl = `mailto:?subject=${encodeURIComponent('Activity at ' + schoolName)}&body=${encodedText}${doubleLineBreak}${encodedUrl}`;
         break;
     }
 
     if (shareUrl) {
       // Email uses mailto: protocol, others use popup window
       if (platform === 'email') {
-        // Validate mailto: protocol before navigating
-        if (shareUrl.startsWith('mailto:')) {
-          window.location.href = shareUrl;
-        }
+        window.location.href = shareUrl;
       } else {
         window.open(shareUrl, '_blank', 'width=600,height=400,noopener,noreferrer');
       }
