@@ -676,7 +676,7 @@ footer {
 }
 
 #dark-mode-toggle:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline: 2px solid currentColor;
   outline-offset: 2px;
 }
 
@@ -687,6 +687,10 @@ body.dark-mode #dark-mode-toggle {
 
 body.dark-mode #dark-mode-toggle:hover {
   background-color: rgba(255, 255, 255, 0.25);
+}
+
+body.dark-mode #dark-mode-toggle:focus {
+  outline-color: rgba(255, 255, 255, 0.8);
 }
 
 /* User controls */
