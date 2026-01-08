@@ -499,12 +499,17 @@ document.addEventListener("DOMContentLoaded", () => {
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
         break;
       case 'email':
-        shareUrl = `mailto:?subject=${encodeURIComponent('Activity at Mergington High School')}&body=${encodedText}%0A%0A${encodedUrl}`;
+        shareUrl = `mailto:?subject=${encodeURIComponent('Activity at Mergington High School')}&body=${encodedText}%0D%0A%0D%0A${encodedUrl}`;
         break;
     }
 
     if (shareUrl) {
-      window.open(shareUrl, '_blank', 'width=600,height=400');
+      // Email uses mailto: protocol, others use popup window
+      if (platform === 'email') {
+        window.location.href = shareUrl;
+      } else {
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+      }
     }
   }
 
