@@ -286,6 +286,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // HTML escape function to prevent XSS
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   // Format schedule for display - handles both old and new format
   function formatSchedule(details) {
     // If schedule_details is available, use the structured data
@@ -520,11 +527,16 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
     // Create difficulty badge if difficulty is set
-    const difficultyHtml = details.difficulty ? `
-      <span class="difficulty-badge difficulty-${details.difficulty.toLowerCase()}">
-        ${details.difficulty}
+    let difficultyHtml = '';
+    if (details.difficulty && typeof details.difficulty === 'string') {
+      const difficultyLower = escapeHtml(details.difficulty.toLowerCase());
+      const difficultyText = escapeHtml(details.difficulty);
+      difficultyHtml = `
+      <span class="difficulty-badge difficulty-${difficultyLower}">
+        ${difficultyText}
       </span>
-    ` : '';
+    `;
+    }
 
     // Create capacity indicator
     const capacityIndicator = `
