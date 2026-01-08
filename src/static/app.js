@@ -493,7 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
         shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
         break;
       case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+        shareUrl = `https://x.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
         break;
       case 'linkedin':
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
@@ -562,8 +562,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <button class="share-button facebook-share" data-activity="${name}" title="Share on Facebook">
           <span class="share-icon">f</span>
         </button>
-        <button class="share-button twitter-share" data-activity="${name}" title="Share on Twitter">
-          <span class="share-icon">𝕏</span>
+        <button class="share-button twitter-share" data-activity="${name}" title="Share on X">
+          <span class="share-icon">X</span>
         </button>
         <button class="share-button linkedin-share" data-activity="${name}" title="Share on LinkedIn">
           <span class="share-icon">in</span>
@@ -643,23 +643,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Add click handlers for social share buttons
-    const facebookBtn = activityCard.querySelector(".facebook-share");
-    const twitterBtn = activityCard.querySelector(".twitter-share");
-    const linkedinBtn = activityCard.querySelector(".linkedin-share");
-    const emailBtn = activityCard.querySelector(".email-share");
+    // Add click handlers for social share buttons using event delegation
+    const shareButtonsContainer = activityCard.querySelector(".social-share");
+    if (shareButtonsContainer) {
+      shareButtonsContainer.addEventListener("click", (event) => {
+        const button = event.target.closest(".share-button");
+        if (!button) return;
 
-    if (facebookBtn) {
-      facebookBtn.addEventListener("click", () => handleShare('facebook', name, details));
-    }
-    if (twitterBtn) {
-      twitterBtn.addEventListener("click", () => handleShare('twitter', name, details));
-    }
-    if (linkedinBtn) {
-      linkedinBtn.addEventListener("click", () => handleShare('linkedin', name, details));
-    }
-    if (emailBtn) {
-      emailBtn.addEventListener("click", () => handleShare('email', name, details));
+        if (button.classList.contains("facebook-share")) {
+          handleShare('facebook', name, details);
+        } else if (button.classList.contains("twitter-share")) {
+          handleShare('twitter', name, details);
+        } else if (button.classList.contains("linkedin-share")) {
+          handleShare('linkedin', name, details);
+        } else if (button.classList.contains("email-share")) {
+          handleShare('email', name, details);
+        }
+      });
     }
 
     activitiesList.appendChild(activityCard);
