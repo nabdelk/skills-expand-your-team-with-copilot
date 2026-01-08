@@ -533,9 +533,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let difficultyHtml = '';
     if (details.difficulty && typeof details.difficulty === 'string') {
       const difficultyText = escapeHtml(details.difficulty);
+      // Sanitize CSS class name - only allow known difficulty levels
+      const validDifficulties = ['beginner', 'intermediate', 'advanced'];
       const difficultyLower = details.difficulty.toLowerCase();
+      const cssClass = validDifficulties.includes(difficultyLower) ? `difficulty-${difficultyLower}` : 'difficulty-unknown';
       difficultyHtml = `
-      <span class="difficulty-badge difficulty-${difficultyLower}">
+      <span class="difficulty-badge ${cssClass}">
         ${difficultyText}
       </span>
     `;
