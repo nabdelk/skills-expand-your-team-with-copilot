@@ -288,8 +288,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // HTML escape function to prevent XSS
   function escapeHtml(text) {
+    if (text == null || text === undefined) {
+      return '';
+    }
     const div = document.createElement('div');
-    div.textContent = text;
+    div.textContent = String(text);
     return div.innerHTML;
   }
 
@@ -529,8 +532,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Create difficulty badge if difficulty is set
     let difficultyHtml = '';
     if (details.difficulty && typeof details.difficulty === 'string') {
-      const difficultyLower = escapeHtml(details.difficulty.toLowerCase());
       const difficultyText = escapeHtml(details.difficulty);
+      const difficultyLower = details.difficulty.toLowerCase();
       difficultyHtml = `
       <span class="difficulty-badge difficulty-${difficultyLower}">
         ${difficultyText}
