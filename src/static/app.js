@@ -474,23 +474,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to generate share URL and text
   function getShareContent(name, details) {
-    const formattedSchedule = formatSchedule(details);
+    const formattedSchedule = formatSchedule(details) || 'TBD';
     const currentUrl = window.location.origin + window.location.pathname;
+    const schoolName = 'Mergington High School';
     
     // Sanitize text content for sharing
     const sanitizedName = name.replace(/[<>]/g, '');
-    const sanitizedDescription = details.description.replace(/[<>]/g, '');
+    const sanitizedDescription = (details.description || '').replace(/[<>]/g, '');
     
-    const shareText = `Check out ${sanitizedName} at Mergington High School! ${sanitizedDescription} Schedule: ${formattedSchedule}`;
+    const shareText = `Check out ${sanitizedName} at ${schoolName}! ${sanitizedDescription} Schedule: ${formattedSchedule}`;
     const encodedText = encodeURIComponent(shareText);
     const encodedUrl = encodeURIComponent(currentUrl);
     
-    return { shareText, encodedText, encodedUrl, currentUrl };
+    return { shareText, encodedText, encodedUrl, currentUrl, schoolName };
   }
 
   // Function to handle social sharing
   function handleShare(platform, name, details) {
-    const { shareText, encodedText, encodedUrl, currentUrl } = getShareContent(name, details);
+    const { shareText, encodedText, encodedUrl, currentUrl, schoolName } = getShareContent(name, details);
     let shareUrl = '';
 
     switch (platform) {
@@ -504,7 +505,7 @@ document.addEventListener("DOMContentLoaded", () => {
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
         break;
       case 'email':
-        shareUrl = `mailto:?subject=${encodeURIComponent('Activity at Mergington High School')}&body=${encodedText}%0D%0A%0D%0A${encodedUrl}`;
+        shareUrl = `mailto:?subject=${encodeURIComponent('Activity at ' + schoolName)}&body=${encodedText}%0D%0A%0D%0A${encodedUrl}`;
         break;
     }
 
@@ -574,17 +575,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const shareButtons = `
       <div class="social-share">
         <span class="share-label">Share:</span>
-        <button class="share-button facebook-share" title="Share on Facebook">
-          <span class="share-icon">f</span>
+        <button class="share-button facebook-share" title="Share on Facebook" aria-label="Share on Facebook">
+          <span class="share-icon" aria-hidden="true">f</span>
         </button>
-        <button class="share-button twitter-share" title="Share on X">
-          <span class="share-icon">X</span>
+        <button class="share-button twitter-share" title="Share on X" aria-label="Share on X (formerly Twitter)">
+          <span class="share-icon" aria-hidden="true">X</span>
         </button>
-        <button class="share-button linkedin-share" title="Share on LinkedIn">
-          <span class="share-icon">in</span>
+        <button class="share-button linkedin-share" title="Share on LinkedIn" aria-label="Share on LinkedIn">
+          <span class="share-icon" aria-hidden="true">in</span>
         </button>
-        <button class="share-button email-share" title="Share via Email">
-          <span class="share-icon">✉</span>
+        <button class="share-button email-share" title="Share via Email" aria-label="Share via Email">
+          <span class="share-icon" aria-hidden="true">✉</span>
         </button>
       </div>
     `;
